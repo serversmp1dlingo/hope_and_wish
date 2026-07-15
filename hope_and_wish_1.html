@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hope and Wish — SMP Negeri 1 Dlingo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#6E0F52;
+    --bg-soft:#7D1861;
+    --panel:#8B2270;
+    --paper-dim:#DCD6F2;
+    --ink:#141B2E;
+    --hope:#5EC8D8;
+    --wish:#F2B84B;
+    --violet:#9B8CF2;
+    --light:#F3F0FA;
+    --line: rgba(243,240,250,0.14);
+    --radius: 18px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle at 15% 0%, rgba(94,200,216,0.10), transparent 45%),
+      radial-gradient(circle at 90% 10%, rgba(242,184,75,0.10), transparent 40%),
+      var(--bg);
+    color:var(--light);
+    font-family:'Inter', sans-serif;
+    line-height:1.55;
+  }
+  h1,h2,h3,.display{font-family:'Baloo 2', sans-serif;}
+  .mono{font-family:'IBM Plex Mono', monospace; letter-spacing:.03em;}
+  a{color:var(--wish);}
+  .wrap{max-width:980px; margin:0 auto; padding:0 20px;}
+
+  /* ---------- TOP BAR ---------- */
+  header.topbar{
+    position:sticky; top:0; z-index:50;
+    background:rgba(110,15,82,0.92);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topbar-inner{display:flex; align-items:center; justify-content:space-between; padding:14px 20px; max-width:980px; margin:0 auto; gap:16px; flex-wrap:wrap;}
+  .brand{display:flex; align-items:center; gap:10px; cursor:pointer;}
+  .brand .dot{width:12px; height:12px; border-radius:50%; background:var(--wish); box-shadow:0 0 0 4px rgba(242,184,75,.18);}
+  .brand h1{font-size:1.15rem; margin:0; color:var(--light);}
+  .brand span{display:block; font-size:.72rem; color:var(--violet); font-family:'IBM Plex Mono',monospace; letter-spacing:.05em;}
+  nav.pills{display:flex; gap:8px; flex-wrap:wrap;}
+  nav.pills button{
+    text-decoration:none; color:var(--light); font-size:.82rem; font-weight:600;
+    padding:8px 14px; border-radius:999px; border:1px solid var(--line);
+    background:var(--panel); transition:.2s; cursor:pointer; font-family:'Inter';
+  }
+  nav.pills button:hover{background:rgba(242,184,75,.18); border-color:var(--wish);}
+  nav.pills button.active{background:var(--wish); color:var(--ink); border-color:var(--wish);}
+
+  /* ---------- PAGE ROUTING ---------- */
+  .page{display:none; padding:56px 0; animation:fadeIn .4s ease;}
+  .page.active{display:block;}
+  @keyframes fadeIn{from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);}}
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:.75rem; letter-spacing:.12em; text-transform:uppercase;
+    color:var(--wish); margin:0 0 8px;
+  }
+  h2.title{font-size:2rem; margin:0 0 22px; color:var(--light);}
+
+  /* ---------- COVER PAGE (NIGHT SKY) ---------- */
+  #page-home{padding-top:0; position:relative; overflow:hidden;}
+  .cover{position:relative; min-height:92vh; display:flex; flex-direction:column; justify-content:center; padding:60px 0 40px;}
+  .night-sky{
+    position:absolute; inset:0; z-index:0; opacity:.8;
+    background:
+      radial-gradient(1.5px 1.5px at 10% 20%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 80% 10%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 60% 40%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 30% 70%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 92% 60%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 50% 85%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 15% 55%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 70% 78%, #fff, transparent 60%),
+      radial-gradient(1px 1px at 40% 15%, #fff, transparent 60%),
+      radial-gradient(1.5px 1.5px at 5% 90%, #fff, transparent 60%);
+    animation:twinkle 4s ease-in-out infinite alternate;
+  }
+  @keyframes twinkle{from{opacity:.4;} to{opacity:.9;}}
+  .moon{position:absolute; top:-60px; right:-40px; width:220px; height:220px; border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, #fff9e8, var(--wish) 70%); opacity:.18; filter:blur(2px); z-index:0;}
+  .shooting-star{position:absolute; top:12%; left:-15%; width:130px; height:2px;
+    background:linear-gradient(90deg, transparent, #fff, transparent); transform:rotate(18deg); opacity:0;
+    animation:shoot 7s linear infinite; z-index:0;}
+  .shooting-star.s2{top:35%; animation-delay:3.2s;}
+  @keyframes shoot{
+    0%{ transform:translate(0,0) rotate(18deg); opacity:0; }
+    4%{opacity:1;}
+    22%{ transform:translate(560px,220px) rotate(18deg); opacity:0;}
+    100%{opacity:0;}
+  }
+
+  .cover-inner{position:relative; z-index:2; text-align:center; max-width:760px; margin:0 auto;}
+  .cover-badge{
+    display:inline-flex; align-items:center; gap:8px; background:var(--panel); border:1px solid var(--line);
+    padding:8px 18px; border-radius:999px; font-family:'IBM Plex Mono',monospace; font-size:.78rem; color:var(--wish);
+    margin-bottom:26px;
+  }
+  .cover-badge .dot{width:8px; height:8px; border-radius:50%; background:var(--hope); animation:pulse 1.6s infinite;}
+  @keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(94,200,216,.5);} 50%{box-shadow:0 0 0 6px rgba(94,200,216,0);}}
+
+  .cover h2{
+    font-size:clamp(2.4rem, 6vw, 4.2rem); line-height:1.05; margin:0 0 20px;
+    background:linear-gradient(100deg, var(--hope) 0%, var(--light) 45%, var(--wish) 100%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .cover p.lead{color:#C9CBE0; font-size:1.08rem; max-width:52ch; margin:0 auto 34px;}
+
+  .cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap; margin-bottom:40px;}
+  .cta-primary, .cta-secondary{padding:14px 26px; border-radius:14px; font-weight:700; font-size:.95rem; cursor:pointer; border:none; font-family:'Inter'; transition:.2s;}
+  .cta-primary{background:var(--wish); color:#2b1c00; box-shadow:0 8px 22px rgba(242,184,75,.28);}
+  .cta-primary:hover{transform:translateY(-2px); box-shadow:0 12px 26px rgba(242,184,75,.4);}
+  .cta-secondary{background:transparent; color:var(--light); border:1px solid var(--line);}
+  .cta-secondary:hover{border-color:var(--hope); color:var(--hope);}
+
+  .wish-box{max-width:520px; margin:0 auto; background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; text-align:left;}
+  .wish-box label{font-family:'IBM Plex Mono',monospace; font-size:.7rem; color:#9AA4C2; text-transform:uppercase; letter-spacing:.08em;}
+  .wish-row{display:flex; gap:10px; margin-top:10px;}
+  .wish-row input{flex:1; background:var(--bg-soft); border:1px solid var(--line); border-radius:10px; color:var(--light); padding:10px 14px; font-family:'Inter'; font-size:.9rem;}
+  .wish-row button{background:var(--hope); color:#062024; border:none; padding:10px 18px; border-radius:10px; font-weight:700; cursor:pointer; white-space:nowrap;}
+  .sky-stage{position:relative; height:150px; overflow:hidden; margin-top:6px;}
+  .floating-star{position:absolute; bottom:0; background:rgba(255,255,255,.06); border:1px solid var(--wish); color:var(--light);
+    padding:6px 14px; border-radius:999px; font-size:.75rem; white-space:nowrap; animation:floatUp 4.5s ease-in forwards;}
+  @keyframes floatUp{0%{transform:translateY(0); opacity:1;} 100%{transform:translateY(-220px); opacity:0;}}
+
+  .explore-label{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.1em; text-transform:uppercase; color:#9AA4C2; margin:34px 0 14px; text-align:center;}
+  .explore-grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px;}
+  @media (max-width:800px){.explore-grid{grid-template-columns:repeat(2,1fr);}}
+  .explore-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px 14px; text-align:center; cursor:pointer; transition:.2s; position:relative; overflow:hidden;}
+  .explore-card:hover{transform:translateY(-4px); border-color:var(--wish); box-shadow:0 10px 24px rgba(0,0,0,.35);}
+  .explore-card .ic{font-size:1.6rem; margin-bottom:8px; display:block;}
+  .explore-card .lb{font-weight:700; font-size:.85rem; display:block;}
+  .explore-card .sub{font-size:.7rem; color:#9AA4C2; display:block; margin-top:4px;}
+
+  /* ---------- CHAT DEMO ---------- */
+  .chat-thread{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:20px; display:flex; flex-direction:column; gap:12px;}
+  .bubble{max-width:78%; padding:11px 15px; border-radius:16px; font-size:.92rem; opacity:0; transform:translateY(8px); animation:rise .5s forwards;}
+  .bubble.a{align-self:flex-start; background:var(--violet); color:#fff; border-bottom-left-radius:4px;}
+  .bubble.b{align-self:flex-end; background:var(--hope); color:#062024; border-bottom-right-radius:4px;}
+  .bubble b{display:block; font-size:.7rem; opacity:.85; margin-bottom:2px; font-family:'IBM Plex Mono',monospace;}
+  @keyframes rise{to{opacity:1; transform:translateY(0);}}
+  .bubble:nth-child(1){animation-delay:.1s;}
+  .bubble:nth-child(2){animation-delay:.7s;}
+  .bubble:nth-child(3){animation-delay:1.3s;}
+  .bubble:nth-child(4){animation-delay:1.9s;}
+
+  /* ---------- CARDS ---------- */
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:var(--radius); padding:24px;}
+  .obj-list{list-style:none; margin:0; padding:0; display:grid; gap:12px;}
+  .obj-list li{display:flex; gap:12px; align-items:flex-start; background:var(--bg-soft); border:1px solid var(--line); border-radius:12px; padding:14px 16px;}
+  .obj-list .num{flex:none; width:28px; height:28px; border-radius:50%; background:var(--wish); color:var(--ink); font-weight:700; display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono',monospace; font-size:.8rem;}
+
+  /* ---------- TABS ---------- */
+  .tabbar{display:flex; gap:8px; margin-bottom:18px; flex-wrap:wrap;}
+  .tabbar button{background:var(--bg-soft); color:var(--light); border:1px solid var(--line); padding:10px 16px; border-radius:12px; cursor:pointer; font-weight:600; font-size:.88rem; font-family:'Inter';}
+  .tabbar button.active{background:var(--hope); color:#062024; border-color:var(--hope);}
+  .tabpanel{display:none;}
+  .tabpanel.active{display:block;}
+  .expr-grid{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px;}
+  @media (max-width:700px){.expr-grid{grid-template-columns:1fr;}}
+  .expr-col h4{margin:0 0 10px; font-size:.95rem;}
+  .flip{perspective:800px; height:64px; cursor:pointer; margin-bottom:10px;}
+  .flip-inner{position:relative; width:100%; height:100%; transition:transform .5s; transform-style:preserve-3d;}
+  .flip.flipped .flip-inner{transform:rotateY(180deg);}
+  .flip-face{position:absolute; inset:0; backface-visibility:hidden; border-radius:12px; display:flex; align-items:center; padding:0 14px; font-weight:600; font-size:.88rem;}
+  .flip-face.front{background:var(--bg-soft); border:1px solid var(--line); color:var(--light);}
+  .flip-face.back{background:var(--wish); color:var(--ink); transform:rotateY(180deg); font-family:'IBM Plex Mono',monospace; font-size:.8rem;}
+  .hope-col .flip-face.front{border-left:4px solid var(--hope);}
+  .wish-col .flip-face.front{border-left:4px solid var(--wish);}
+
+  /* ---------- SORT GAME ---------- */
+  .chips{display:flex; gap:10px; flex-wrap:wrap; margin-bottom:20px;}
+  .chip{background:var(--bg-soft); border:1px solid var(--line); border-radius:999px; padding:9px 16px; font-size:.85rem; cursor:grab; font-weight:600;}
+  .bins{display:grid; grid-template-columns:1fr 1fr; gap:16px;}
+  @media (max-width:700px){.bins{grid-template-columns:1fr;}}
+  .bin{min-height:120px; border-radius:14px; border:2px dashed var(--line); padding:14px; display:flex; flex-wrap:wrap; gap:8px; align-content:flex-start;}
+  .bin.hope-bin{border-color:var(--hope);}
+  .bin.wish-bin{border-color:var(--wish);}
+  .bin-label{width:100%; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.06em; text-transform:uppercase; margin-bottom:6px; opacity:.8;}
+  .bin.dragover{background:rgba(242,184,75,0.12);}
+
+  /* ---------- GUIDED PRACTICE ---------- */
+  .dialog-fill{background:var(--bg-soft); border:1px solid var(--line); border-radius:14px; padding:20px; font-size:.95rem;}
+  .dialog-fill p{margin:10px 0;}
+  .dialog-fill input{background:var(--panel); border:1px solid var(--wish); border-radius:8px; color:var(--light); padding:5px 10px; font-family:'IBM Plex Mono',monospace; width:150px; font-size:.85rem;}
+
+  /* ---------- QUIZ ---------- */
+  .quiz-progress{display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;}
+  #scoreReadout{font-family:'IBM Plex Mono',monospace; color:var(--wish); font-weight:600;}
+  .qcard{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:20px; margin-bottom:18px;}
+  .qtag{display:inline-block; font-size:.68rem; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.06em; background:var(--wish); color:var(--ink); padding:3px 10px; border-radius:999px; margin-bottom:10px;}
+  .qtext{font-weight:600; margin:0 0 14px; font-size:.98rem;}
+  .opt-row{display:flex; gap:10px; flex-wrap:wrap;}
+  .opt-btn{background:var(--bg-soft); border:1px solid var(--line); color:var(--light); padding:9px 16px; border-radius:10px; cursor:pointer; font-weight:600; font-size:.85rem;}
+  .opt-btn.correct{background:var(--hope); border-color:var(--hope); color:#062024;}
+  .opt-btn.wrong{background:#E8595E; border-color:#E8595E; color:#fff;}
+  .feedback{margin-top:12px; font-size:.85rem; font-weight:600; min-height:20px;}
+  .feedback.ok{color:var(--hope);}
+  .feedback.no{color:#F08A8E;}
+  .match-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media (max-width:600px){.match-grid{grid-template-columns:1fr;}}
+  .match-item{background:var(--bg-soft); border:1px solid var(--line); padding:9px 12px; border-radius:10px; margin-bottom:8px; cursor:pointer; font-size:.85rem;}
+  .match-item.selected{border-color:var(--wish); background:rgba(242,184,75,.15);}
+  .match-item.locked{background:rgba(94,200,216,.18); border-color:var(--hope); cursor:default;}
+  .short-row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .short-row input{background:var(--bg-soft); border:1px solid var(--line); border-radius:8px; color:var(--light); padding:8px 12px; font-family:'IBM Plex Mono',monospace; min-width:140px;}
+  .check-btn{background:var(--wish); color:var(--ink); border:none; padding:8px 16px; border-radius:8px; font-weight:700; cursor:pointer;}
+
+  /* ---------- SUMMARY ---------- */
+  .summary-grid{display:grid; grid-template-columns:1.1fr .9fr; gap:24px;}
+  @media (max-width:800px){.summary-grid{grid-template-columns:1fr;}}
+  .concept-map{width:100%; height:auto;}
+  textarea.reflect{width:100%; min-height:110px; background:var(--bg-soft); border:1px solid var(--line); border-radius:12px; color:var(--light); padding:14px; font-family:'Inter'; font-size:.9rem; resize:vertical;}
+  .next-card{margin-top:18px; display:flex; align-items:center; justify-content:space-between; gap:14px; background:linear-gradient(120deg, rgba(94,200,216,.14), rgba(242,184,75,.14)); border:1px solid var(--line); border-radius:14px; padding:16px 20px; flex-wrap:wrap;}
+  .next-card .go{background:var(--wish); color:var(--ink); padding:9px 16px; border-radius:10px; font-weight:700; text-decoration:none; font-size:.85rem; border:none; cursor:pointer;}
+
+  /* ---------- FOOTER ---------- */
+  footer{border-top:1px solid var(--line); background:var(--bg-soft); padding:26px 0;}
+  .foot-inner{display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px; font-size:.82rem; color:#9AA4C2;}
+  .foot-inner b{color:var(--light);}
+
+  a:focus-visible, button:focus-visible, input:focus-visible, .flip:focus-visible, .chip:focus-visible{
+    outline:3px solid var(--wish); outline-offset:2px;
+  }
+  @media (prefers-reduced-motion: reduce){
+    *{animation-duration:.01ms !important; transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand" onclick="showPage('home')">
+      <span class="dot"></span>
+      <div>
+        <h1>Hope &amp; Wish</h1>
+        <span>ENGLISH · GRADE 9 · 1ST SEMESTER</span>
+      </div>
+    </div>
+    <nav class="pills">
+      <button data-page="home" class="active" onclick="showPage('home')">Home</button>
+      <button data-page="tujuan" onclick="showPage('tujuan')">Objectives</button>
+      <button data-page="materi" onclick="showPage('materi')">Material</button>
+      <button data-page="aktivitas" onclick="showPage('aktivitas')">Activity</button>
+      <button data-page="diskusi" onclick="showPage('diskusi')">Wish Circle</button>
+      <button data-page="latihan" onclick="showPage('latihan')">Practice</button>
+      <button data-page="kuis" onclick="showPage('kuis')">Quiz</button>
+      <button data-page="simpulan" onclick="showPage('simpulan')">Summary</button>
+    </nav>
+  </div>
+</header>
+
+<main id="mainArea">
+
+<!-- ============ COVER / HOME ============ -->
+<section class="page active" id="page-home">
+  <div class="cover">
+    <div class="night-sky"></div>
+    <div class="moon"></div>
+    <div class="shooting-star"></div>
+    <div class="shooting-star s2"></div>
+
+    <div class="wrap cover-inner">
+      <div class="cover-badge"><span class="dot"></span>SMP NEGERI 1 DLINGO · GRADE 9 · TP 2026/2027</div>
+      <h2>Make a wish.<br>Say a hope. In English.</h2>
+      <p class="lead">An interactive English lesson on expressing hopes and wishes — the realistic kind and the imaginary kind — through dialogues, sorting games, a group wish circle, and a quiz that responds instantly.</p>
+
+      <div class="cta-row">
+        <button class="cta-primary" onclick="showPage('tujuan')">Start Learning →</button>
+        <button class="cta-secondary" onclick="showPage('kuis')">Jump to Quiz</button>
+      </div>
+
+      <div class="wish-box">
+        <label>Try it now</label>
+        <div class="wish-row">
+          <input type="text" id="wishInput" placeholder="Type one hope or wish you have...">
+          <button onclick="releaseWish()">Send to the sky ✨</button>
+        </div>
+        <div class="sky-stage" id="skyStage"></div>
+      </div>
+
+      <div class="explore-label">Click a card to explore that part of the lesson</div>
+      <div class="explore-grid">
+        <div class="explore-card" onclick="showPage('tujuan')"><span class="ic">🎯</span><span class="lb">Objectives</span><span class="sub">What you'll learn</span></div>
+        <div class="explore-card" onclick="showPage('materi')"><span class="ic">📖</span><span class="lb">Material</span><span class="sub">Function · Structure · Language</span></div>
+        <div class="explore-card" onclick="showPage('aktivitas')"><span class="ic">🌠</span><span class="lb">Activity</span><span class="sub">Sort hope vs. wish</span></div>
+        <div class="explore-card" onclick="showPage('diskusi')"><span class="ic">🤲</span><span class="lb">Wish Circle</span><span class="sub">Share in a group</span></div>
+        <div class="explore-card" onclick="showPage('latihan')"><span class="ic">✏️</span><span class="lb">Practice</span><span class="sub">Complete a dialogue</span></div>
+        <div class="explore-card" onclick="showPage('kuis')"><span class="ic">🧠</span><span class="lb">Quiz</span><span class="sub">10 questions, 5 types</span></div>
+        <div class="explore-card" onclick="showPage('simpulan')"><span class="ic">🗺️</span><span class="lb">Summary</span><span class="sub">Recap &amp; reflect</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ LEARNING OBJECTIVES ============ -->
+<section class="page" id="page-tujuan">
+  <div class="wrap">
+    <p class="eyebrow">Learning Objectives</p>
+    <h2 class="title">By the end of this lesson, you will be able to...</h2>
+    <div class="card">
+      <ul class="obj-list">
+        <li><span class="num">1</span><div><b>Identify</b> at least 5 expressions of hope and wish from an authentic dialogue that is listened to or read, with at least 80% accuracy.</div></li>
+        <li><span class="num">2</span><div><b>Explain</b> the social function, text structure, and language features of hope and wish texts through group discussion, using your own words.</div></li>
+        <li><span class="num">3</span><div><b>Compose</b> a short dialogue (at least 6 lines) containing at least 3 hope/wish expressions about your future, in pairs, within 15 minutes.</div></li>
+        <li><span class="num">4</span><div><b>Share</b> a personal hope or wish respectfully in a small group, and <b>reflect</b> on gratitude toward Tuhan Yang Maha Esa for what you already have while still hoping for more.</div></li>
+      </ul>
+      <div class="next-card" style="margin-top:22px;">
+        <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">See the material — function, structure, and expressions.</span></div>
+        <button class="go" onclick="showPage('materi')">Go to Material →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MATERIAL ============ -->
+<section class="page" id="page-materi">
+  <div class="wrap">
+    <p class="eyebrow">Presenting the Material</p>
+    <h2 class="title">Social Function, Text Structure &amp; Language Features</h2>
+
+    <div class="chat-thread" style="margin-bottom:22px;">
+      <div class="bubble a"><b>Rani</b>I have my English speech competition tomorrow.</div>
+      <div class="bubble b"><b>Budi</b>I hope you do great! You've practiced so much.</div>
+      <div class="bubble a"><b>Rani</b>Thank you. I just wish I were a little more confident.</div>
+      <div class="bubble b"><b>Budi</b>You'll be fine. Let's hope for the best tomorrow!</div>
+    </div>
+
+    <div class="card">
+      <div class="tabbar">
+        <button type="button" class="tab-btn active" data-tab="fungsi">🎯 Social Function</button>
+        <button type="button" class="tab-btn" data-tab="struktur">🧩 Text Structure</button>
+        <button type="button" class="tab-btn" data-tab="bahasa">💬 Language Features</button>
+        <button type="button" class="tab-btn" data-tab="contoh">📝 Example Dialogues</button>
+      </div>
+
+      <div class="tabpanel active" id="tab-fungsi">
+        <p>Hope and wish texts are used to <b>express, ask about, and respond to</b> someone's hopes for the future and wishes for things that are not (yet) real. In everyday life, they also help us express gratitude and trust while still hoping for something better — for ourselves, for others, and for the world around us.</p>
+        <p style="margin-top:16px;">We use these expressions in many everyday situations. Here are some common contexts and example sentences:</p>
+        <div class="obj-list" style="margin-top:12px;">
+          <li><span class="num">1</span><div><b>Before an exam or competition</b><br>"I hope you do well in the test tomorrow." · "I hope we win the match."</div></li>
+          <li><span class="num">2</span><div><b>When someone is sick or in trouble</b><br>"I hope you get well soon." · "I hope everything works out for you."</div></li>
+          <li><span class="num">3</span><div><b>Talking about dreams for the future</b><br>"I wish I could travel around the world." · "I wish I were a doctor already."</div></li>
+          <li><span class="num">4</span><div><b>Celebrations, like New Year or a birthday</b><br>"I wish you a wonderful year ahead." · "I hope this year brings you happiness."</div></li>
+          <li><span class="num">5</span><div><b>Expressing gratitude alongside hope</b><br>"I'm grateful for my family, and I hope we stay healthy together." This shows how hope and gratitude often go hand in hand.</div></li>
+        </div>
+      </div>
+
+      <div class="tabpanel" id="tab-struktur">
+        <p>In general, a hope/wish dialogue follows this pattern:</p>
+        <ul>
+          <li><b>Statement of Hope/Wish</b> — the speaker expresses a hope or wish. <span class="mono">"I hope..." / "I wish..."</span></li>
+          <li><b>Elaboration</b> — a short reason or detail behind it.</li>
+          <li><b>Response</b> — the listener responds supportively (e.g. "Amen", "I hope so too", "Good luck").</li>
+          <li><b>Closing</b> — closing the exchange warmly.</li>
+        </ul>
+        <p style="margin-top:16px;">Here is the structure applied to a real example — notice how each line matches one part of the pattern:</p>
+        <div class="dialog-fill" style="margin-top:10px;">
+          <p><span class="qtag" style="margin-bottom:6px;">Statement</span><br><b>Sari:</b> I hope I get accepted into the science club.</p>
+          <p><span class="qtag" style="margin-bottom:6px;">Elaboration</span><br><b>Sari:</b> I've wanted to join since last year, but the selection is tough.</p>
+          <p><span class="qtag" style="margin-bottom:6px;">Response</span><br><b>Dika:</b> I hope so too! You always ask such great questions in class.</p>
+          <p><span class="qtag" style="margin-bottom:6px;">Closing</span><br><b>Sari:</b> Thanks, Dika. Fingers crossed for both of us!</p>
+        </div>
+      </div>
+
+      <div class="tabpanel" id="tab-bahasa">
+        <p>Notice that <b>hope</b> is for realistic outcomes, while <b>wish</b> is for things that are imaginary or not true right now.</p>
+
+        <div class="dialog-fill" style="margin:16px 0;">
+          <p class="mono" style="color:var(--wish); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em; margin-bottom:10px;">Grammar formulas</p>
+          <p style="margin-bottom:12px;"><b>Hope</b> (realistic) — <span class="mono">S + hope (that) + S + V1 / will + V1</span><br><span style="color:#C9CBE0; font-size:.88rem;">Example: "I hope she arrives on time." · "I hope you will succeed."</span></p>
+          <p style="margin-bottom:12px;"><b>Wish</b> (present, unreal) — <span class="mono">S + wish + S + were / V2</span><br><span style="color:#C9CBE0; font-size:.88rem;">Example: "I wish I were free today." · "I wish I had more free time."</span></p>
+          <p style="margin-bottom:12px;"><b>Wish</b> (asking for change) — <span class="mono">S + wish + S + would + V1</span><br><span style="color:#C9CBE0; font-size:.88rem;">Example: "I wish you would listen to me."</span></p>
+          <p style="margin-bottom:0;"><b>Wish</b> (past regret) — <span class="mono">S + wish + S + had + V3</span><br><span style="color:#C9CBE0; font-size:.88rem;">Example: "I wish I had brought an umbrella."</span></p>
+        </div>
+
+        <p>Click each card below to see the grammar tip:</p>
+        <div class="expr-grid">
+          <div class="expr-col hope-col">
+            <h4 style="color:var(--hope)">🌤 Hope (realistic)</h4>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I hope you pass the exam.</div><div class="flip-face back">Realistic hope — simple present/future tense.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">Hopefully, it won't rain.</div><div class="flip-face back">An adverb meaning "I hope that...".</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">Let's hope for the best.</div><div class="flip-face back">An invitation to stay optimistic together.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I really hope so.</div><div class="flip-face back">A strong, realistic hope.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I hope to see you soon.</div><div class="flip-face back">Hope + infinitive (to + verb), same subject.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">We're hoping for good news.</div><div class="flip-face back">Hope can also be used as "-ing", showing an ongoing hope.</div></div></div>
+          </div>
+          <div class="expr-col wish-col">
+            <h4 style="color:var(--wish)">🌠 Wish (imaginary)</h4>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I wish I were taller.</div><div class="flip-face back">Unreal wish — uses "were" for every subject.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I wish I could fly.</div><div class="flip-face back">Impossible wish — "could" + base verb.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">If only I had more time.</div><div class="flip-face back">A stronger, more emotional way to say "I wish".</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I wish I had studied harder.</div><div class="flip-face back">Regret about the past — "had" + past participle.</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I wish you were here.</div><div class="flip-face back">Wishing someone were present right now — uses "were".</div></div></div>
+            <div class="flip" tabindex="0"><div class="flip-inner"><div class="flip-face front">I wish it would stop raining.</div><div class="flip-face back">Wishing a situation would change — "wish + would".</div></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabpanel" id="tab-contoh">
+        <p>Read these two full dialogues to see hope and wish expressions used naturally in context.</p>
+        <div class="dialog-fill" style="margin:16px 0;">
+          <p class="mono" style="color:var(--hope); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;">Dialogue 1 · Before a Sports Match</p>
+          <p><b>Andi:</b> Our football match against SMP 2 is this Saturday.</p>
+          <p><b>Bayu:</b> I hope we win! We've trained so hard this month.</p>
+          <p><b>Andi:</b> Me too. I just wish I were a bit faster on the field.</p>
+          <p><b>Bayu:</b> You'll do great, don't worry. Let's hope for a good game!</p>
+        </div>
+        <div class="dialog-fill">
+          <p class="mono" style="color:var(--wish); font-size:.72rem; text-transform:uppercase; letter-spacing:.06em;">Dialogue 2 · New Year's Wishes</p>
+          <p><b>Sari:</b> Happy New Year, Dika! What do you hope for this year?</p>
+          <p><b>Dika:</b> I hope I can improve my English score. And you?</p>
+          <p><b>Sari:</b> I wish I could travel to Bali with my family.</p>
+          <p><b>Dika:</b> That sounds wonderful. I hope your wish comes true!</p>
+        </div>
+      </div>
+      <div class="next-card" style="margin-top:22px;">
+        <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">Try the sorting activity.</span></div>
+        <button class="go" onclick="showPage('aktivitas')">Go to Activity →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INTERACTIVE ACTIVITY ============ -->
+<section class="page" id="page-aktivitas">
+  <div class="wrap">
+    <p class="eyebrow">Interactive Student Activity</p>
+    <h2 class="title">Drag each sentence into the right sky</h2>
+    <div class="card">
+      <p>Drag each chip into the <b>Hope</b> or <b>Wish</b> box it belongs to. This builds <i>critical and independent thinking (Mandiri)</i> in telling realistic hopes apart from imaginary wishes.</p>
+      <div class="chips" id="sortChips">
+        <div class="chip" draggable="true" data-answer="hope">I hope you feel better soon.</div>
+        <div class="chip" draggable="true" data-answer="wish">I wish I had a bigger room.</div>
+        <div class="chip" draggable="true" data-answer="hope">Hopefully, we'll meet again.</div>
+        <div class="chip" draggable="true" data-answer="wish">If only I could sing.</div>
+        <div class="chip" draggable="true" data-answer="hope">I really hope it works out.</div>
+        <div class="chip" draggable="true" data-answer="wish">I wish I were more confident.</div>
+      </div>
+      <div class="bins">
+        <div class="bin hope-bin" id="binHope" data-zone="hope"><span class="bin-label" style="color:var(--hope)">Hope</span></div>
+        <div class="bin wish-bin" id="binWish" data-zone="wish"><span class="bin-label" style="color:var(--wish)">Wish</span></div>
+      </div>
+      <div class="feedback" id="sortFeedback"></div>
+      <div class="next-card" style="margin-top:22px;">
+        <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">Share a wish with your group.</span></div>
+        <button class="go" onclick="showPage('diskusi')">Go to Wish Circle →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ WISH CIRCLE (GROUP DISCUSSION) ============ -->
+<section class="page" id="page-diskusi">
+  <div class="wrap">
+    <p class="eyebrow">Collaborative Learning · Bergotong Royong &amp; Keimanan</p>
+    <h2 class="title">Wish Circle: Share Your Hopes</h2>
+    <div class="card">
+      <p>Sit in a group of 4. Pick one topic below, assign roles, and take turns sharing — each member must use at least one hope or wish expression, and everyone listens with respect.</p>
+
+      <h3 style="margin-bottom:10px; font-size:1rem;">1 · Choose a sharing topic</h3>
+      <div class="explore-grid" id="topicGrid" style="grid-template-columns:repeat(2,1fr); margin-bottom:20px;">
+        <div class="explore-card topic-card" data-topic="What is one hope you have for your family this year?"><span class="ic">👨‍👩‍👧</span><span class="lb">Family</span><span class="sub">A hope for the people at home</span></div>
+        <div class="explore-card topic-card" data-topic="What is one wish you have for your future career?"><span class="ic">💼</span><span class="lb">Future Career</span><span class="sub">A wish for who you'll become</span></div>
+        <div class="explore-card topic-card" data-topic="What is something you wish you could change or improve at school?"><span class="ic">🏫</span><span class="lb">School Life</span><span class="sub">A wish to make things better</span></div>
+        <div class="explore-card topic-card" data-topic="What is one hope you have for the environment around you?"><span class="ic">🌱</span><span class="lb">Environment</span><span class="sub">A hope for the world</span></div>
+      </div>
+      <div class="dialog-fill" id="topicBanner" style="margin-bottom:22px;">
+        <span class="mono" style="color:var(--wish); font-size:.75rem;">CURRENT TOPIC</span>
+        <p id="topicText" style="margin:6px 0 0; font-weight:600;">No topic selected yet — click a card above.</p>
+      </div>
+
+      <h3 style="margin-bottom:10px; font-size:1rem;">2 · Assign roles in your group</h3>
+      <div class="explore-grid" style="grid-template-columns:repeat(4,1fr); margin-bottom:22px;">
+        <div class="explore-card" style="cursor:default;"><span class="ic">🎤</span><span class="lb">Facilitator</span><span class="sub">Keeps the sharing going</span></div>
+        <div class="explore-card" style="cursor:default;"><span class="ic">✍️</span><span class="lb">Note-taker</span><span class="sub">Writes down each hope/wish</span></div>
+        <div class="explore-card" style="cursor:default;"><span class="ic">⏱️</span><span class="lb">Timekeeper</span><span class="sub">Watches the clock</span></div>
+        <div class="explore-card" style="cursor:default;"><span class="ic">📣</span><span class="lb">Presenter</span><span class="sub">Reports to the class</span></div>
+      </div>
+
+      <h3 style="margin-bottom:10px; font-size:1rem;">3 · Share (5-minute timer)</h3>
+      <div class="dialog-fill" style="margin-bottom:22px; display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:14px;">
+        <div id="timerReadout" class="mono" style="font-size:1.6rem; color:var(--wish);">05:00</div>
+        <div style="display:flex; gap:10px;">
+          <button class="check-btn" id="timerStartBtn" onclick="timerToggle()">Start</button>
+          <button class="cta-secondary" style="padding:8px 16px;" onclick="timerReset()">Reset</button>
+        </div>
+      </div>
+
+      <h3 style="margin-bottom:10px; font-size:1rem;">4 · Sharing checklist</h3>
+      <div class="obj-list" style="margin-bottom:22px;">
+        <li><label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;"><input type="checkbox"> Every group member shared a hope or wish.</label></li>
+        <li><label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;"><input type="checkbox"> The group used at least 3 different hope/wish expressions.</label></li>
+        <li><label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;"><input type="checkbox"> Everyone listened respectfully without interrupting.</label></li>
+        <li><label style="display:flex; gap:10px; align-items:flex-start; cursor:pointer;"><input type="checkbox"> The group also named one thing they're already grateful for.</label></li>
+      </div>
+
+      <h3 style="margin-bottom:10px; font-size:1rem;">5 · Group notes</h3>
+      <textarea class="reflect" id="groupNotes" placeholder="Note-taker: write down each member's hope or wish and their reason..."></textarea>
+
+      <div class="next-card" style="margin-top:22px;">
+        <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">Complete a guided dialogue on your own.</span></div>
+        <button class="go" onclick="showPage('latihan')">Go to Practice →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ GUIDED PRACTICE ============ -->
+<section class="page" id="page-latihan">
+  <div class="wrap">
+    <p class="eyebrow">Guided Practice</p>
+    <h2 class="title">Complete the dialogue below</h2>
+    <div class="card">
+      <div class="dialog-fill">
+        <p><b>Rani:</b> I have an English speech competition tomorrow.</p>
+        <p><b>Budi:</b> I <input type="text" id="fill1" placeholder="hope / wish" size="10"> you do great! You've practiced so much.</p>
+        <p><b>Rani:</b> Thanks! I just wish I <input type="text" id="fill2" placeholder="was/were" size="10"> a little more confident.</p>
+        <button class="check-btn" onclick="checkFill()">Check Answers</button>
+        <p id="fillFeedback" class="feedback"></p>
+      </div>
+      <div class="next-card" style="margin-top:22px;">
+        <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">Take the 10-question quiz.</span></div>
+        <button class="go" onclick="showPage('kuis')">Go to Quiz →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ QUIZ ============ -->
+<section class="page" id="page-kuis">
+  <div class="wrap">
+    <p class="eyebrow">Evaluation &amp; Feedback</p>
+    <h2 class="title">Interactive Quiz</h2>
+    <div class="quiz-progress">
+      <span class="mono" style="color:#B9C2CE;">10 questions · 5 quiz types</span>
+      <span id="scoreReadout">Score: 0 / 10</span>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Multiple Choice</span>
+      <p class="qtext">1. Which word correctly completes: "I ___ you get well soon."</p>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="checkMC(this,1,false)">wish</button>
+        <button class="opt-btn" onclick="checkMC(this,1,true)">hope</button>
+        <button class="opt-btn" onclick="checkMC(this,1,false)">hoping</button>
+        <button class="opt-btn" onclick="checkMC(this,1,false)">wishes</button>
+      </div>
+      <p class="feedback" id="fb1"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Multiple Choice</span>
+      <p class="qtext">2. Which sentence expresses an imaginary wish (not true now)?</p>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="checkMC(this,2,false)">I hope it doesn't rain.</button>
+        <button class="opt-btn" onclick="checkMC(this,2,true)">I wish I could fly.</button>
+        <button class="opt-btn" onclick="checkMC(this,2,false)">I hope you win.</button>
+        <button class="opt-btn" onclick="checkMC(this,2,false)">Let's hope for the best.</button>
+      </div>
+      <p class="feedback" id="fb2"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Fill in the Blank</span>
+      <p class="qtext">3. Complete: "I ___ it doesn't rain tomorrow." (a realistic hope)</p>
+      <div class="short-row">
+        <input type="text" id="q3" placeholder="your answer...">
+        <button class="check-btn" onclick="checkShort(3,'hope')">Check</button>
+      </div>
+      <p class="feedback" id="fb3"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Fill in the Blank</span>
+      <p class="qtext">4. Complete: "I wish I ___ taller." (an imaginary wish)</p>
+      <div class="short-row">
+        <input type="text" id="q4" placeholder="your answer...">
+        <button class="check-btn" onclick="checkShort(4,'were')">Check</button>
+      </div>
+      <p class="feedback" id="fb4"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">True / False</span>
+      <p class="qtext">5. "Wish" often uses a past-tense verb form even when talking about the present.</p>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="checkTF(this,5,true,'True')">True</button>
+        <button class="opt-btn" onclick="checkTF(this,5,true,'False')">False</button>
+      </div>
+      <p class="feedback" id="fb5"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">True / False</span>
+      <p class="qtext">6. "Hope" is only used for things that are impossible.</p>
+      <div class="opt-row">
+        <button class="opt-btn" onclick="checkTF(this,6,false,'True')">True</button>
+        <button class="opt-btn" onclick="checkTF(this,6,false,'False')">False</button>
+      </div>
+      <p class="feedback" id="fb6"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Matching</span>
+      <p class="qtext">7. Match each expression with its meaning.</p>
+      <div class="match-grid" id="match1">
+        <div id="match1-left">
+          <div class="match-item" data-pair="a">I hope you succeed.</div>
+          <div class="match-item" data-pair="b">I wish I were a bird.</div>
+          <div class="match-item" data-pair="c">Let's hope for the best.</div>
+        </div>
+        <div id="match1-right">
+          <div class="match-item" data-pair="c">Encouraging everyone to stay positive.</div>
+          <div class="match-item" data-pair="a">A realistic hope for a good outcome.</div>
+          <div class="match-item" data-pair="b">An imaginary wish, not real.</div>
+        </div>
+      </div>
+      <p class="feedback" id="fb7"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Matching</span>
+      <p class="qtext">8. Match the following expressions with their meaning.</p>
+      <div class="match-grid" id="match2">
+        <div id="match2-left">
+          <div class="match-item" data-pair="a">I really hope so.</div>
+          <div class="match-item" data-pair="b">If only I had more time.</div>
+          <div class="match-item" data-pair="c">I wish I had studied harder.</div>
+        </div>
+        <div id="match2-right">
+          <div class="match-item" data-pair="b">A stronger way of saying "I wish".</div>
+          <div class="match-item" data-pair="c">Regret about something in the past.</div>
+          <div class="match-item" data-pair="a">A strong, realistic hope.</div>
+        </div>
+      </div>
+      <p class="feedback" id="fb8"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Drag &amp; Drop</span>
+      <p class="qtext">9. Drag each sentence into the correct group.</p>
+      <div class="chips" id="dd9chips">
+        <div class="chip" draggable="true" data-answer="hope">Hopefully we'll win.</div>
+        <div class="chip" draggable="true" data-answer="wish">I wish I had a dog.</div>
+        <div class="chip" draggable="true" data-answer="hope">I hope you're okay.</div>
+        <div class="chip" draggable="true" data-answer="wish">If only I could sing.</div>
+      </div>
+      <div class="bins">
+        <div class="bin hope-bin" data-zone="hope" id="q9Hope"><span class="bin-label" style="color:var(--hope)">Hope</span></div>
+        <div class="bin wish-bin" data-zone="wish" id="q9Wish"><span class="bin-label" style="color:var(--wish)">Wish</span></div>
+      </div>
+      <p class="feedback" id="fb9"></p>
+    </div>
+
+    <div class="qcard">
+      <span class="qtag">Drag &amp; Drop</span>
+      <p class="qtext">10. Drag each sentence into the correct group.</p>
+      <div class="chips" id="dd10chips">
+        <div class="chip" draggable="true" data-answer="hope">I really hope you come.</div>
+        <div class="chip" draggable="true" data-answer="wish">I wish it were summer.</div>
+        <div class="chip" draggable="true" data-answer="hope">I hope everything goes well.</div>
+        <div class="chip" draggable="true" data-answer="wish">I wish I knew the answer.</div>
+      </div>
+      <div class="bins">
+        <div class="bin hope-bin" data-zone="hope" id="q10Hope"><span class="bin-label" style="color:var(--hope)">Hope</span></div>
+        <div class="bin wish-bin" data-zone="wish" id="q10Wish"><span class="bin-label" style="color:var(--wish)">Wish</span></div>
+      </div>
+      <p class="feedback" id="fb10"></p>
+    </div>
+
+    <div class="next-card">
+      <div><b style="display:block; font-family:'Baloo 2';">Next up</b><span style="font-size:.82rem; color:#C9CBE0;">Wrap up and reflect.</span></div>
+      <button class="go" onclick="showPage('simpulan')">Go to Summary →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SUMMARY ============ -->
+<section class="page" id="page-simpulan">
+  <div class="wrap">
+    <p class="eyebrow">Summary</p>
+    <h2 class="title">Wrapping Up &amp; Reflecting</h2>
+    <div class="summary-grid">
+      <div class="card">
+        <h3 style="margin-top:0;">Key Points</h3>
+        <ul>
+          <li>Hope/wish texts express hopes for the future and wishes for things not (yet) real.</li>
+          <li>Structure: <b>Hope/Wish Statement → Elaboration → Response → Closing</b>.</li>
+          <li>Hope expressions: I hope..., Hopefully..., Let's hope for the best, etc. (realistic, present/future tense)</li>
+          <li>Wish expressions: I wish I were..., I wish I could..., If only..., etc. (imaginary, past-tense form)</li>
+          <li>Sharing hopes and wishes respectfully also means being grateful for what we already have.</li>
+        </ul>
+        <h3>Concept Map</h3>
+        <svg class="concept-map" viewBox="0 0 520 210" xmlns="http://www.w3.org/2000/svg">
+          <rect x="190" y="10" width="140" height="40" rx="10" fill="var(--wish)"/>
+          <text x="260" y="35" font-size="12" text-anchor="middle" fill="#141B2E" font-weight="700">HOPE / WISH</text>
+          <line x1="230" y1="50" x2="120" y2="90" stroke="var(--hope)" stroke-width="2"/>
+          <line x1="290" y1="50" x2="400" y2="90" stroke="var(--wish)" stroke-width="2"/>
+          <rect x="40" y="90" width="160" height="40" rx="10" fill="var(--hope)"/>
+          <text x="120" y="115" font-size="12" text-anchor="middle" fill="#062024" font-weight="700">HOPE (real)</text>
+          <rect x="320" y="90" width="160" height="40" rx="10" fill="var(--wish)"/>
+          <text x="400" y="115" font-size="12" text-anchor="middle" fill="#141B2E" font-weight="700">WISH (imaginary)</text>
+          <line x1="120" y1="130" x2="260" y2="170" stroke="#9AA4C2" stroke-width="2"/>
+          <line x1="400" y1="130" x2="260" y2="170" stroke="#9AA4C2" stroke-width="2"/>
+          <rect x="180" y="170" width="160" height="34" rx="10" fill="var(--panel)" stroke="#9AA4C2"/>
+          <text x="260" y="192" font-size="11" text-anchor="middle" fill="var(--light)" font-weight="700">RESPONSE + CLOSING</text>
+        </svg>
+      </div>
+      <div class="card">
+        <h3 style="margin-top:0;">Self-Reflection Journal</h3>
+        <p style="font-size:.88rem; color:#C9CBE0;">Write down: What hope or wish did you share today? What are you already grateful for?</p>
+        <textarea class="reflect" placeholder="Write your reflection here..."></textarea>
+        <div class="next-card">
+          <div>
+            <b style="display:block; font-family:'Baloo 2';">Next Topic</b>
+            <span style="font-size:.82rem; color:#C9CBE0;">Congratulation and Compliment →</span>
+          </div>
+          <button class="go" onclick="showPage('home')">Back to Home</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <div>📍 <b>SMP Negeri 1 Dlingo</b> · English · Grade 9 · 1st Semester · Academic Year 2026/2027</div>
+    <div>👩‍🏫 Prepared by <b>Bustanul Ulum, M.Pd</b></div>
+  </div>
+</footer>
+
+<script>
+  // ---------- PAGE ROUTING ----------
+  function showPage(id){
+    document.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    document.querySelectorAll('nav.pills button').forEach(function(b){ b.classList.remove('active'); });
+    var target = document.getElementById('page-'+id);
+    if(target) target.classList.add('active');
+    var navBtn = document.querySelector('nav.pills button[data-page="'+id+'"]');
+    if(navBtn) navBtn.classList.add('active');
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  // ---------- WISH BOX ----------
+  function releaseWish(){
+    var input = document.getElementById('wishInput');
+    var val = input.value.trim();
+    if(!val) return;
+    var stage = document.getElementById('skyStage');
+    var star = document.createElement('div');
+    star.className = 'floating-star';
+    star.textContent = '✨ ' + val;
+    star.style.left = (5 + Math.random()*60) + '%';
+    stage.appendChild(star);
+    input.value = '';
+    setTimeout(function(){ star.remove(); }, 4600);
+  }
+
+  // ---------- TABS ----------
+  document.querySelectorAll('.tab-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+      document.querySelectorAll('.tabpanel').forEach(function(p){ p.classList.remove('active'); });
+      btn.classList.add('active');
+      document.getElementById('tab-'+btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ---------- FLIP CARDS ----------
+  document.querySelectorAll('.flip').forEach(function(card){
+    var toggle = function(){ card.classList.toggle('flipped'); };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keypress', function(e){ if(e.key==='Enter' || e.key===' ') toggle(); });
+  });
+
+  // ---------- GENERIC DRAG & DROP ----------
+  function wireDragDrop(chipContainerId, bins, feedbackId, onComplete){
+    var chips = document.querySelectorAll('#'+chipContainerId+' .chip');
+    var placed = 0;
+    var total = chips.length;
+    chips.forEach(function(chip){
+      chip.addEventListener('dragstart', function(e){
+        e.dataTransfer.setData('text/plain', '');
+        e.dataTransfer.effectAllowed = 'move';
+        window.__dragChip = chip;
+      });
+    });
+    bins.forEach(function(binEl){
+      binEl.addEventListener('dragover', function(e){ e.preventDefault(); binEl.classList.add('dragover'); });
+      binEl.addEventListener('dragleave', function(){ binEl.classList.remove('dragover'); });
+      binEl.addEventListener('drop', function(e){
+        e.preventDefault();
+        binEl.classList.remove('dragover');
+        var chip = window.__dragChip;
+        if(!chip || chip.dataset.placed) return;
+        var correct = chip.dataset.answer === binEl.dataset.zone;
+        chip.style.opacity = '0.55';
+        chip.setAttribute('draggable','false');
+        chip.dataset.placed = 'yes';
+        chip.style.background = correct ? 'var(--hope)' : '#E8595E';
+        chip.style.color = correct ? '#062024' : '#fff';
+        binEl.appendChild(chip);
+        placed++;
+        var fb = document.getElementById(feedbackId);
+        if(fb){ fb.textContent = correct ? 'Correct!' : 'Check the meaning again.'; fb.className = 'feedback ' + (correct ? 'ok':'no'); }
+        if(placed === total && onComplete) onComplete();
+      });
+    });
+  }
+  wireDragDrop('sortChips', [document.getElementById('binHope'), document.getElementById('binWish')], 'sortFeedback');
+  wireDragDrop('dd9chips', [document.getElementById('q9Hope'), document.getElementById('q9Wish')], 'fb9', function(){ markScored(9,true); });
+  wireDragDrop('dd10chips', [document.getElementById('q10Hope'), document.getElementById('q10Wish')], 'fb10', function(){ markScored(10,true); });
+
+  // ---------- SCORING ----------
+  var scored = {};
+  function markScored(qnum, correct){
+    if(scored[qnum] !== undefined) return;
+    scored[qnum] = correct;
+    updateScore();
+  }
+  function updateScore(){
+    var right = Object.keys(scored).filter(function(k){ return scored[k]; }).length;
+    document.getElementById('scoreReadout').textContent = 'Score: '+right+' / 10';
+  }
+
+  // ---------- MULTIPLE CHOICE ----------
+  function checkMC(btn, qnum, correct){
+    var fb = document.getElementById('fb'+qnum);
+    var row = btn.parentElement;
+    row.querySelectorAll('.opt-btn').forEach(function(b){ b.classList.remove('correct','wrong'); });
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    fb.textContent = correct ? "That's the right choice!" : 'Not quite - try to spot the correct option next time.';
+    fb.className = 'feedback ' + (correct ? 'ok':'no');
+    markScored(qnum, correct);
+  }
+
+  // ---------- FILL IN THE BLANK ----------
+  function checkShort(qnum, answer){
+    var input = document.getElementById('q'+qnum);
+    var fb = document.getElementById('fb'+qnum);
+    var val = input.value.trim().toLowerCase();
+    var correct = (val === answer) || (answer === 'were' && val === 'was');
+    fb.textContent = correct ? 'Correct! The expected answer is "'+answer+'".' : 'Not quite - think about whether this is a realistic hope or an imaginary wish.';
+    fb.className = 'feedback ' + (correct ? 'ok':'no');
+    markScored(qnum, correct);
+  }
+
+  // ---------- TRUE / FALSE ----------
+  function checkTF(btn, qnum, correctIsTrue, chosenLabel){
+    var fb = document.getElementById('fb'+qnum);
+    var chosenTrue = chosenLabel === 'True';
+    var correct = chosenTrue === correctIsTrue;
+    var row = btn.parentElement;
+    row.querySelectorAll('.opt-btn').forEach(function(b){ b.classList.remove('correct','wrong'); });
+    btn.classList.add(correct ? 'correct' : 'wrong');
+    fb.textContent = correct ? "That's right!" : 'Not quite - think about the meaning again.';
+    fb.className = 'feedback ' + (correct ? 'ok':'no');
+    markScored(qnum, correct);
+  }
+
+  // ---------- MATCHING ----------
+  function wireMatch(containerId, qnum){
+    var container = document.getElementById(containerId);
+    var items = container.querySelectorAll('.match-item');
+    var selected = null;
+    var correctCount = 0;
+    var totalPairs = new Set(Array.prototype.map.call(items, function(i){ return i.dataset.pair; })).size;
+    var fb = document.getElementById('fb'+qnum);
+    items.forEach(function(item){
+      item.addEventListener('click', function(){
+        if(item.classList.contains('locked')) return;
+        if(!selected){
+          selected = item;
+          item.classList.add('selected');
+        } else if(selected === item){
+          selected.classList.remove('selected');
+          selected = null;
+        } else {
+          var sameSide = selected.parentElement === item.parentElement;
+          if(sameSide){
+            selected.classList.remove('selected');
+            selected = item;
+            item.classList.add('selected');
+            return;
+          }
+          if(selected.dataset.pair === item.dataset.pair){
+            selected.classList.remove('selected');
+            selected.classList.add('locked');
+            item.classList.add('locked');
+            selected = null;
+            correctCount++;
+            if(fb){ fb.textContent = 'Correct match! ('+correctCount+'/'+totalPairs+')'; fb.className='feedback ok'; }
+            if(correctCount === totalPairs) markScored(qnum, true);
+          } else {
+            item.classList.add('selected');
+            if(fb){ fb.textContent = 'Not a match yet, try another pair.'; fb.className='feedback no'; }
+            var s = selected, it = item;
+            setTimeout(function(){
+              s.classList.remove('selected');
+              it.classList.remove('selected');
+              selected = null;
+            }, 500);
+          }
+        }
+      });
+    });
+  }
+  wireMatch('match1', 7);
+  wireMatch('match2', 8);
+
+  // ---------- GROUP DISCUSSION: TOPIC PICKER ----------
+  document.querySelectorAll('.topic-card').forEach(function(card){
+    card.addEventListener('click', function(){
+      document.querySelectorAll('.topic-card').forEach(function(c){ c.style.borderColor = ''; c.style.background=''; });
+      card.style.borderColor = 'var(--wish)';
+      card.style.background = 'rgba(242,184,75,.12)';
+      document.getElementById('topicText').textContent = card.dataset.topic;
+    });
+  });
+
+  // ---------- GROUP DISCUSSION: TIMER ----------
+  var timerSeconds = 300;
+  var timerInterval = null;
+  var timerRunning = false;
+  function renderTimer(){
+    var m = Math.floor(timerSeconds/60);
+    var s = timerSeconds%60;
+    var mm = m < 10 ? '0'+m : ''+m;
+    var ss = s < 10 ? '0'+s : ''+s;
+    document.getElementById('timerReadout').textContent = mm+':'+ss;
+  }
+  function timerToggle(){
+    var btn = document.getElementById('timerStartBtn');
+    if(timerRunning){
+      clearInterval(timerInterval);
+      timerRunning = false;
+      btn.textContent = 'Start';
+    } else {
+      timerRunning = true;
+      btn.textContent = 'Pause';
+      timerInterval = setInterval(function(){
+        if(timerSeconds > 0){
+          timerSeconds--;
+          renderTimer();
+        } else {
+          clearInterval(timerInterval);
+          timerRunning = false;
+          btn.textContent = 'Start';
+          document.getElementById('timerReadout').textContent = "Time's up!";
+        }
+      }, 1000);
+    }
+  }
+  function timerReset(){
+    clearInterval(timerInterval);
+    timerRunning = false;
+    timerSeconds = 300;
+    document.getElementById('timerStartBtn').textContent = 'Start';
+    renderTimer();
+  }
+
+  // ---------- GUIDED PRACTICE FILL ----------
+  function checkFill(){
+    var f1 = document.getElementById('fill1').value.trim().toLowerCase();
+    var f2 = document.getElementById('fill2').value.trim().toLowerCase();
+    var fb = document.getElementById('fillFeedback');
+    var ok1 = f1 === 'hope';
+    var ok2 = f2 === 'were' || f2 === 'was';
+    if(ok1 && ok2){
+      fb.textContent = 'Great! Both blanks are correct.';
+      fb.className = 'feedback ok';
+    } else {
+      fb.textContent = 'Hint: the first blank is a realistic hope, the second is part of an imaginary wish ("wish I were...").';
+      fb.className = 'feedback no';
+    }
+  }
+</script>
+</body>
+</html>
